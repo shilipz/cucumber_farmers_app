@@ -81,157 +81,146 @@ class PaymentProfile extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                const Row(
-                  children: [
-                    Arrowback(backcolor: darkgreen),
-                    Captions(
-                        captions: 'Payment Information',
-                        captionColor: darkgreen),
-                  ],
+          child: Column(
+            children: [
+              const Row(
+                children: [
+                  Arrowback(backcolor: darkgreen),
+                  Captions(
+                      captions: 'Payment Information', captionColor: darkgreen),
+                ],
+              ),
+              Container(
+                height: screenHeight,
+                width: screenWidth,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: AlignmentDirectional.topStart,
+                      end: Alignment.bottomCenter,
+                      colors: [kwhite, lightgreen]),
                 ),
-                Container(
-                  height: screenHeight,
-                  width: screenWidth,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: AlignmentDirectional.topStart,
-                        end: Alignment.bottomCenter,
-                        colors: [kwhite, lightgreen]),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    ),
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.only(top: screenHeight * 0.14, left: 20),
-                    child: FutureBuilder(
-                      future: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .get(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                            child: Text('Error occurred: ${snapshot.error}'),
-                          );
-                        } else if (!snapshot.hasData || snapshot.data == null) {
-                          return const Center(
-                            child: Text('Document not found'),
-                          );
-                        }
-                        final userData =
-                            snapshot.data!.data() as Map<String, dynamic>;
+                child: Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.08, left: 20),
+                  child: FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error occurred: ${snapshot.error}'),
+                        );
+                      } else if (!snapshot.hasData || snapshot.data == null) {
+                        return const Center(
+                          child: Text('Document not found'),
+                        );
+                      }
+                      final userData =
+                          snapshot.data!.data() as Map<String, dynamic>;
 
-                        holdersName =
-                            userData['accountName']?.toString() ?? 'N/A';
-                        accountNum =
-                            userData['accountNumber']?.toString() ?? 'N/A';
-                        ifscCode = userData['ifsc']?.toString() ?? 'N/A';
+                      holdersName =
+                          userData['accountName']?.toString() ?? 'N/A';
+                      accountNum =
+                          userData['accountNumber']?.toString() ?? 'N/A';
+                      ifscCode = userData['ifsc']?.toString() ?? 'N/A';
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("Bank Details",
-                                style:
-                                    TextStyle(fontSize: 18, color: darkgreen)),
-                            sheight,
-                            sheight,
-                            ListTile(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //-----------title
-                                  const Text("Account holder's Name",
-                                      style: TextStyle(color: Colors.grey)),
-                                  sheight,
-                                  Text(
-                                    holdersName,
-                                    style: const TextStyle(fontSize: 22),
-                                  ),
-                                ],
-                              ),
-                              trailing: IconButton(
-                                  onPressed: () {
-                                    _openEditBottomSheet(
-                                        context, 'accountName', holdersName);
-                                  },
-                                  icon: const Icon(Icons.edit)),
-                            ),
-                            sheight,
-                            ListTile(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Account Number",
-                                      style: TextStyle(color: Colors.grey)),
-                                  sheight,
-                                  Text(
-                                    accountNum,
-                                    style: const TextStyle(fontSize: 22),
-                                  ),
-                                ],
-                              ),
-                              trailing: IconButton(
-                                  onPressed: () {
-                                    _openEditBottomSheet(
-                                        context, 'accountNumber', accountNum);
-                                  },
-                                  icon: const Icon(Icons.edit)),
-                            ),
-                            sheight,
-                            ListTile(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("IFSC Code",
-                                      style: TextStyle(color: Colors.grey)),
-                                  sheight,
-                                  Text(ifscCode,
-                                      style: const TextStyle(fontSize: 22))
-                                ],
-                              ),
-                              trailing: IconButton(
-                                  onPressed: () {
-                                    _openEditBottomSheet(
-                                        context, 'ifsc', ifscCode);
-                                  },
-                                  icon: const Icon(Icons.edit)),
-                            ),
-                            const SizedBox(height: 34),
-                            sheight,
-                            const Center(
-                                child: Text(
-                                    'By clicking on the submit button, you agreed to our terms and conditions',
-                                    style: TextStyle(fontSize: 12))),
-                            const SizedBox(height: 32),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Bank Details",
+                              style: TextStyle(fontSize: 18, color: darkgreen)),
+                          sheight,
+                          sheight,
+                          ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.list),
-                                Text('Terms & Conditions', style: commonText),
+                                //-----------title
+                                const Text("Account holder's Name",
+                                    style: TextStyle(color: Colors.grey)),
+                                sheight,
+                                Text(
+                                  holdersName,
+                                  style: const TextStyle(fontSize: 22),
+                                ),
                               ],
                             ),
-                            lheight,
-                            lheight,
-                            lheight
-                          ],
-                        );
-                      },
-                    ),
+                            trailing: IconButton(
+                                onPressed: () {
+                                  _openEditBottomSheet(
+                                      context, 'accountName', holdersName);
+                                },
+                                icon: const Icon(Icons.edit)),
+                          ),
+                          sheight,
+                          ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("Account Number",
+                                    style: TextStyle(color: Colors.grey)),
+                                sheight,
+                                Text(
+                                  accountNum,
+                                  style: const TextStyle(fontSize: 22),
+                                ),
+                              ],
+                            ),
+                            trailing: IconButton(
+                                onPressed: () {
+                                  _openEditBottomSheet(
+                                      context, 'accountNumber', accountNum);
+                                },
+                                icon: const Icon(Icons.edit)),
+                          ),
+                          sheight,
+                          ListTile(
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text("IFSC Code",
+                                    style: TextStyle(color: Colors.grey)),
+                                sheight,
+                                Text(ifscCode,
+                                    style: const TextStyle(fontSize: 22))
+                              ],
+                            ),
+                            trailing: IconButton(
+                                onPressed: () {
+                                  _openEditBottomSheet(
+                                      context, 'ifsc', ifscCode);
+                                },
+                                icon: const Icon(Icons.edit)),
+                          ),
+                          const SizedBox(height: 34),
+                          sheight,
+                          const Center(
+                              child: Text(
+                                  'By clicking on the submit button, you agreed to our terms and conditions',
+                                  style: TextStyle(fontSize: 12))),
+                          const SizedBox(height: 32),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.list),
+                              Text('Terms & Conditions', style: commonText),
+                            ],
+                          ),
+                          lheight,
+                          lheight,
+                          lheight
+                        ],
+                      );
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

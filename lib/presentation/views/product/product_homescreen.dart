@@ -2,7 +2,7 @@ import 'package:cucumber_app/main.dart';
 import 'package:cucumber_app/presentation/views/home/home_screen.dart';
 import 'package:cucumber_app/presentation/views/product/in_sale_vegs.dart';
 import 'package:cucumber_app/presentation/views/product/products.dart';
-import 'package:cucumber_app/presentation/views/product/requests.dart';
+import 'package:cucumber_app/presentation/views/product/pending_requests.dart';
 import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -34,22 +34,25 @@ class _ProductsHomescreenState extends State<ProductsHomescreen> {
                 ])),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Home(),
-                              ));
-                        },
-                        icon: const Icon(Icons.arrow_back_ios,
-                            size: 25, color: darkgreen)),
-                    const Captions(
-                        captionColor: darkgreen,
-                        captions: 'Join Our Sales team')
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Home(),
+                                ));
+                          },
+                          icon: const Icon(Icons.arrow_back_ios,
+                              size: 25, color: darkgreen)),
+                      const Captions(
+                          captionColor: darkgreen,
+                          captions: 'Join Our Sales team')
+                    ],
+                  ),
                 ),
                 lheight,
                 const TabBar(
@@ -68,7 +71,7 @@ class _ProductsHomescreenState extends State<ProductsHomescreen> {
                 ),
                 const Expanded(
                   child: TabBarView(
-                    children: [AddProducts(), InSale(), PendingVeggies()],
+                    children: [AddProducts(), InSale(), PendingRequests()],
                   ),
                 ),
               ],

@@ -91,29 +91,28 @@ class _ContactDetailsState extends State<ContactDetails> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: screenWidth * 0.8),
-                child: const Arrowback(backcolor: darkgreen),
-              ),
-              const Captions(
-                  captions: 'Join Cucumber Sales Team',
-                  captionColor: darkgreen),
-              Container(
-                height: screenHeight,
-                width: screenWidth,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: AlignmentDirectional.topStart,
-                      end: Alignment.bottomCenter,
-                      colors: [kwhite, lightgreen]),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
+        body: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: screenWidth * 0.8),
+              child: const Arrowback(backcolor: darkgreen),
+            ),
+            const Captions(
+                captions: 'Join Cucumber Sales Team', captionColor: darkgreen),
+            Container(
+              height: screenHeight,
+              width: screenWidth,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: AlignmentDirectional.topStart,
+                    end: Alignment.bottomCenter,
+                    colors: [kwhite, lightgreen]),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
                 ),
+              ),
+              child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(25),
                   child: Form(
@@ -121,7 +120,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Contact Details',
+                        const Text('Contactsssss Details',
                             style: TextStyle(fontSize: 18, color: darkgreen)),
                         sheight,
                         ContactForm(
@@ -159,15 +158,6 @@ class _ContactDetailsState extends State<ContactDetails> {
                         const Text('also pin your location on map',
                             style: TextStyle(fontSize: 18, color: darkgreen)),
                         SizedBox(height: screenHeight * 0.01),
-                        Next(
-                            onPressed: () {
-                              if (_formkey.currentState!.validate()) {
-                                return addUserDetails(context);
-                              }
-                              log('message');
-                            },
-                            buttonText: 'Save',
-                            buttonColor: darkgreen),
                         Center(
                           child: IconButton(
                               onPressed: () {
@@ -181,13 +171,25 @@ class _ContactDetailsState extends State<ContactDetails> {
                                 color: Colors.red,
                               )),
                         ),
+                        Next(
+                            onPressed: () {
+                              if (_formkey.currentState!.validate()) {
+                                addUserDetails(context);
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //   builder: (context) => const CurrentLocation(),
+                                // ));
+                              }
+                              log('message');
+                            },
+                            buttonText: 'Save',
+                            buttonColor: darkgreen),
                       ],
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -218,14 +220,15 @@ class _ContactDetailsState extends State<ContactDetails> {
       // 'pincode': pincode,
     });
     // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile created  successfully')));
-    navigatorKey.currentState?.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => Login(),
-      ),
-      (route) => false,
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile created successfully')),
+      );
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => Login()),
+        (route) => false,
+      );
+    }
   }
 
   String formatText(String text) {

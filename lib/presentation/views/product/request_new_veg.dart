@@ -10,17 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Approvals extends StatefulWidget {
-  const Approvals({Key? key}) : super(key: key);
+class RequestNewVeg extends StatefulWidget {
+  const RequestNewVeg({Key? key}) : super(key: key);
 
   @override
-  State<Approvals> createState() => _ApprovalsState();
+  State<RequestNewVeg> createState() => _ApprovalsState();
 }
 
 final TextEditingController nameController = TextEditingController();
 final TextEditingController priceController = TextEditingController();
 
-class _ApprovalsState extends State<Approvals> {
+class _ApprovalsState extends State<RequestNewVeg> {
   File? _image;
   UploadTask? uploadTask;
   Future _getImage(ImageSource source) async {
@@ -31,6 +31,13 @@ class _ApprovalsState extends State<Approvals> {
         _image = File(PickedFile.path);
       });
     }
+  }
+
+  @override
+  void dispose() {
+    nameController.clear();
+    priceController.clear();
+    super.dispose();
   }
 
   Future uploadFile() async {
@@ -98,26 +105,26 @@ class _ApprovalsState extends State<Approvals> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: SizedBox(
-                    width: 90,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _submit();
-                        uploadFile();
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(lightgreen),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ))),
-                      child: const Text(
-                        'Done',
-                        style: TextStyle(fontSize: 18, color: kwhite),
-                      ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _submit();
+                      uploadFile();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Vegetable requested for approval.'),
+                      ));
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(lightgreen),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ))),
+                    child: const Text(
+                      'Done',
+                      style: TextStyle(fontSize: 18, color: kwhite),
                     ),
                   ),
                 ),
@@ -150,7 +157,7 @@ class _ApprovalsState extends State<Approvals> {
       final uploadTask = ref.putFile(file);
       await uploadTask.whenComplete(() async {
         final urlDownload = await ref.getDownloadURL();
-        print('Download Link: $urlDownload');
+        log('Download Link: $urlDownload');
 
         // Update the Firestore document with the image URL
         await pending.update({'imageUrl': urlDownload});

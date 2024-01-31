@@ -3,6 +3,10 @@
 
 import 'dart:developer';
 
+import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
+import 'package:cucumber_app/presentation/views/contact_details/contact_profile.dart';
+import 'package:cucumber_app/presentation/views/signing/login.dart';
+import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,15 +15,11 @@ import 'package:rive/rive.dart';
 import 'package:cucumber_app/domain/models/user_model.dart';
 import 'package:cucumber_app/domain/repositories/auth.dart';
 import 'package:cucumber_app/main.dart';
-import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
 import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({
-    Key? key,
-    this.customValidator,
-  }) : super(key: key);
+  const SignUpScreen({Key? key, this.customValidator}) : super(key: key);
   final String? Function(String?)? customValidator;
 
   @override
@@ -112,9 +112,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(height: screenHeight * 0.05),
                       Forms(
                           loginText: 'Password',
+                          obscureText: true,
                           inputController: passwordController),
                       SizedBox(height: screenHeight * 0.05),
-                      Forms(loginText: 'Confirm Password'),
+                      Forms(loginText: 'Confirm Password', obscureText: true),
                       SizedBox(height: screenHeight * 0.05),
                       SignUpButton(
                         buttonText: 'Sign Up',
@@ -157,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (user != null) {
       log("User is successfully created");
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const ContactDetails(),
+        builder: (context) => ContactDetails(),
       ));
     } else if (emailController.text.isEmpty ||
         passwordController.text.isEmpty) {

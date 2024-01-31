@@ -53,6 +53,7 @@ class ContactForm extends StatelessWidget {
 }
 
 class Next extends StatelessWidget {
+  final IconData? pinIcon;
   final String buttonText;
   final Color buttonColor;
   final Function()? onPressed;
@@ -60,7 +61,8 @@ class Next extends StatelessWidget {
       {required this.buttonText,
       required this.buttonColor,
       super.key,
-      this.onPressed});
+      this.onPressed,
+      this.pinIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +77,19 @@ class Next extends StatelessWidget {
                   RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ))),
-          child: Text(
-            buttonText,
-            style: const TextStyle(fontSize: 18, color: kwhite),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                buttonText,
+                style: const TextStyle(fontSize: 18, color: kwhite),
+              ),
+              Icon(
+                pinIcon,
+                size: 32,
+                color: Colors.red,
+              )
+            ],
           ),
         ),
       ),
@@ -98,6 +110,23 @@ class Captions extends StatelessWidget {
             textStyle: TextStyle(
                 color: captionColor,
                 fontSize: 24,
+                fontWeight: FontWeight.bold)));
+  }
+}
+
+class WelcomeCaptions extends StatelessWidget {
+  final String captions;
+  final Color captionColor;
+  const WelcomeCaptions(
+      {required this.captionColor, required this.captions, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(captions,
+        style: GoogleFonts.playfairDisplay(
+            textStyle: TextStyle(
+                color: captionColor,
+                fontSize: 30,
                 fontWeight: FontWeight.bold)));
   }
 }
@@ -123,7 +152,7 @@ class ProfileEdit extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label!,
+            label ?? '',
             style: const TextStyle(color: Colors.grey),
           ),
           Text(text ?? '')

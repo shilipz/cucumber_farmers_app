@@ -43,6 +43,7 @@ class SaleItem extends StatelessWidget {
                 builder: (context) => ProductDetails(
                   vegetablePrice: price,
                   vegetableName: name,
+                  imageURL: imageUrl,
                 ),
               ));
             } else {
@@ -57,7 +58,7 @@ class SaleItem extends StatelessWidget {
               ),
             ),
           ),
-          child: const Text('Add to Sale'),
+          child: const Text('Add to Sale', style: TextStyle(color: kwhite)),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cucumber_app/presentation/presentation_logic/product_search/product_search_bloc.dart';
-import 'package:cucumber_app/presentation/views/product/approvals.dart';
+import 'package:cucumber_app/presentation/views/product/request_new_veg.dart';
 import 'package:cucumber_app/presentation/views/product/sale_item_widget.dart';
 import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
@@ -49,19 +49,13 @@ class _AddProductsState extends State<AddProducts> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Search Vegetables...',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      searchController.clear();
-                    },
-                  ),
                 ),
               ),
             ),
             sheight,
             GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const Approvals(),
+                      builder: (context) => const RequestNewVeg(),
                     )),
                 child: const Center(
                     child: Text(
@@ -95,11 +89,7 @@ class _AddProductsState extends State<AddProducts> {
                             : state.filteredVegetables;
 
                         return ListView.builder(
-                          itemCount: showAllItems
-                              ? vegetables.length
-                              : vegetables.length > 4
-                                  ? 4
-                                  : vegetables.length,
+                          itemCount: vegetables.length,
                           itemBuilder: (context, index) {
                             var vegetable = vegetables[index];
                             var name = vegetable['name'];
@@ -115,15 +105,6 @@ class _AddProductsState extends State<AddProducts> {
                     },
                   ),
                 );
-              },
-            ),
-            Next(
-              buttonText: showAllItems ? 'Show Less' : 'See More',
-              buttonColor: darkgreen,
-              onPressed: () {
-                setState(() {
-                  showAllItems = !showAllItems;
-                });
               },
             ),
           ],

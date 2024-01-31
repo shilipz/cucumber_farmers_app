@@ -59,7 +59,7 @@ class LocationState extends State<Location> {
         onPressed: () {
           saveToFirebase(widget.latitude, widget.longitude);
         },
-        label: const Text('Save Location'),
+        label: const Text('Save Location', style: TextStyle(color: kwhite)),
       ),
     );
   }

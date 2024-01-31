@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cucumber_app/domain/models/user_model.dart';
 import 'package:cucumber_app/main.dart';
 import 'package:cucumber_app/presentation/views/home/main_screens_nav.dart';
-import 'package:cucumber_app/presentation/views/settings.dart';
+import 'package:cucumber_app/presentation/views/settings/settings.dart';
 import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/utils/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,50 +34,55 @@ class Home extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       backgroundColor: kwhite,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Positioned.fill(
-                child: Image.asset('assets/signin.png', fit: BoxFit.fill)),
-            IconButton(
-                color: kwhite,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SettingScreen(),
-                  ));
-                },
-                icon: const Icon(Icons.settings, size: 32)),
-            FutureBuilder<UserModel>(
-              future: _getUserData(user!.uid),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error ${snapshot.error}'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text("user not found"));
-                } else {
-                  var userData = snapshot.data;
-                  var username = userData?.username;
-                  return Column(
+      body: Stack(
+        children: [
+          Positioned.fill(
+              child: Image.asset('assets/signin.png', fit: BoxFit.fill)),
+          FutureBuilder<UserModel>(
+            future: _getUserData(user!.uid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error ${snapshot.error}'));
+              } else if (!snapshot.hasData) {
+                return const Center(child: Text("user not found"));
+              } else {
+                var userData = snapshot.data;
+                var username = userData?.username;
+                return SingleChildScrollView(
+                  child: Column(
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
                             bottom: screenHeight * 0.1,
                             top: screenHeight * 0.1),
-                        child: Captions(
+                        child: WelcomeCaptions(
                             captionColor: kwhite,
                             captions: '$greeting , $username'),
                       ),
                       const MainSreensNav(),
-                      lheight
                     ],
-                  );
-                }
-              },
-            )
-          ],
-        ),
+                  ),
+                );
+              }
+            },
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: IconButton(
+                color: kwhite,
+                onPressed: () {
+                  log('icon pressed');
+                  log('IconButton pressed - Context: $context');
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SettingScreen(),
+                  ));
+                },
+                icon: const Icon(Icons.settings, size: 32)),
+          ),
+        ],
       ),
     ));
   }

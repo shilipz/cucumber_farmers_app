@@ -121,7 +121,10 @@ class _CurrentLocationState extends State<CurrentLocation> {
                     },
                   ));
                 },
-                child: const Text('Get Current Location'),
+                child: const Text(
+                  'Get Current Location',
+                  style: TextStyle(color: kwhite),
+                ),
               ),
               ElevatedButton(
                   style: ButtonStyle(
@@ -134,7 +137,8 @@ class _CurrentLocationState extends State<CurrentLocation> {
                   onPressed: () {
                     _openMap(lat!, long!);
                   },
-                  child: const Text('Open Google Map'))
+                  child: const Text('Open Google Map',
+                      style: TextStyle(color: kwhite)))
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:cucumber_app/main.dart';
+import 'package:cucumber_app/presentation/views/settings/about.dart';
 import 'package:cucumber_app/presentation/views/signing/login.dart';
 import 'package:cucumber_app/presentation/widgets/contact_form_widgets.dart';
 import 'package:cucumber_app/presentation/widgets/signing_widgets.dart';
@@ -60,7 +61,10 @@ class SettingScreen extends StatelessWidget {
                             color: darkgreen,
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AboutScreen()));
+                              },
                               child: const Text(
                                 'About',
                                 style:

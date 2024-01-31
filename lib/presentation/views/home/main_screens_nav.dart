@@ -35,9 +35,11 @@ class MainSreensNav extends StatelessWidget {
               )),
           sheight,
           InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ContactProfile(),
-                  )),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ContactProfile(),
+                ));
+              },
               child: const HomeContainer(
                 title: 'Contact Details',
                 subtitle: 'Add/update collection address',

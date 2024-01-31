@@ -90,7 +90,7 @@ class _LoginState extends State<Login> {
                       TextButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => SignUpScreen()));
+                                builder: (context) => const SignUpScreen()));
                           },
                           child: const Text(
                             'SignUp',

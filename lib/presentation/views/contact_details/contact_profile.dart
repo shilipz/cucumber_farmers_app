@@ -93,71 +93,66 @@ class ContactProfile extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenWidth * 0.1),
-                      child: const Arrowback(backcolor: darkgreen),
-                    ),
-                    const Captions(
-                        captions: 'Profile', captionColor: darkgreen),
-                  ],
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Arrowback(backcolor: darkgreen),
+                  const Captions(
+                      captions: 'Contact Details', captionColor: darkgreen),
+                ],
+              ),
+              Container(
+                height: screenHeight,
+                width: screenWidth,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: AlignmentDirectional.topStart,
+                      end: Alignment.bottomCenter,
+                      colors: [kwhite, lightgreen]),
+                  // borderRadius: BorderRadius.only(
+                  //   topLeft: Radius.circular(40),
+                  //   topRight: Radius.circular(40),
+                  // ),
                 ),
-                Container(
-                  height: screenHeight,
-                  width: screenWidth,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: AlignmentDirectional.topStart,
-                        end: Alignment.bottomCenter,
-                        colors: [kwhite, lightgreen]),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(25),
-                    child: FutureBuilder(
-                      future: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user!.uid)
-                          .get(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                            child: Text('Error occurred: ${snapshot.error}'),
-                          );
-                        } else if (!snapshot.hasData || snapshot.data == null) {
-                          // Handle the case where the document does not exist
-                          return const Center(
-                            child: Text('Document not found'),
-                          );
-                        }
+                child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(user!.uid)
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error occurred: ${snapshot.error}'),
+                        );
+                      } else if (!snapshot.hasData || snapshot.data == null) {
+                        // Handle the case where the document does not exist
+                        return const Center(
+                          child: Text('Document not found'),
+                        );
+                      }
 
-                        final userData =
-                            snapshot.data!.data() as Map<String, dynamic>;
-                        var fullName =
-                            userData['fullname']?.toString() ?? 'N/A';
-                        var phoneNumber =
-                            userData['phoneNumber']?.toString() ?? 'N/A';
-                        var houseName =
-                            userData['houseName']?.toString() ?? 'N/A';
-                        var streetName =
-                            userData['streetName']?.toString() ?? 'N/A';
-                        var landmark =
-                            userData['landmark']?.toString() ?? 'N/A';
+                      final userData =
+                          snapshot.data!.data() as Map<String, dynamic>;
+                      var fullName = userData['fullname']?.toString() ??
+                          'Provide full name ';
+                      var phoneNumber = userData['phoneNumber']?.toString() ??
+                          'Add phone number';
+                      var houseName = userData['houseName']?.toString() ??
+                          'Provide address details';
+                      //var streetName = userData['streetName']?.toString() ??
+                      'complete address';
+                      var landmark = userData['landmark']?.toString() ??
+                          'provide a landmark';
 
-                        return Column(
+                      return SingleChildScrollView(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('Contact Details',
@@ -189,22 +184,22 @@ class ContactProfile extends StatelessWidget {
                             sheight,
                             ProfileEdit(
                                 icons: Icons.house,
-                                label: 'Farm/House name',
+                                label: 'Farm/House address',
                                 onpressed: () {
                                   _openEditBottomSheet(
                                       context, 'house name', houseName);
                                 },
                                 text: houseName),
                             sheight,
-                            ProfileEdit(
-                                icons: Icons.streetview,
-                                label: 'Street name',
-                                onpressed: () {
-                                  _openEditBottomSheet(
-                                      context, 'street name', streetName);
-                                },
-                                text: streetName),
-                            sheight,
+                            // ProfileEdit(
+                            //     icons: Icons.streetview,
+                            //     label: 'Street name',
+                            //     onpressed: () {
+                            //       _openEditBottomSheet(
+                            //           context, 'street name', streetName);
+                            //     },
+                            //     text: streetName),
+                            // sheight,
                             ProfileEdit(
                                 icons: Icons.landscape,
                                 label: 'Landmark',
@@ -219,11 +214,18 @@ class ContactProfile extends StatelessWidget {
                                 label: 'pincode',
                                 onpressed: () {},
                                 text: 'pincode'),
-                            sheight,
+                            // sheight,
 
-                            SizedBox(height: screenHeight * 0.01),
+                            // SizedBox(height: screenHeight * 0.01),
+                            // const Center(
+                            //     child: Icon(
+                            //   Icons.location_pin,
+                            //   color: Colors.red,
+                            //   size: 32,
+                            // )),
+                            lheight,
                             Center(
-                              child: IconButton(
+                              child: Next(
                                   onPressed: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
@@ -231,20 +233,18 @@ class ContactProfile extends StatelessWidget {
                                           const CurrentLocation(),
                                     ));
                                   },
-                                  icon: const Icon(
-                                    Icons.location_pin,
-                                    color: Colors.red,
-                                    size: 32,
-                                  )),
+                                  buttonText: 'Click to add location in  map',
+                                  pinIcon: Icons.location_pin,
+                                  buttonColor: darkgreen),
                             )
                           ],
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -257,7 +257,7 @@ class ContactProfile extends StatelessWidget {
     String fullName = formatText(fullNameController.text);
     String phoneNumber = formatText(phoneNumberController.text);
     String houseName = formatText(houseNameController.text);
-    String streetName = formatText(streetNameController.text);
+    // String streetName = formatText(streetNameController.text);
     String landmark = formatText(landmarkController.text);
 
     var userDocRef =
@@ -275,11 +275,13 @@ class ContactProfile extends StatelessWidget {
       await userDocRef.update({
         'houseName': houseName,
       });
-    } else if (streetName != '') {
-      await userDocRef.update({
-        "streetName": streetName,
-      });
-    } else if (landmark != '') {
+    }
+    // else if (streetName != '') {
+    //   await userDocRef.update({
+    //     "streetName": streetName,
+    //   });
+    // }
+    else if (landmark != '') {
       await userDocRef.update({
         'landmark': landmark,
       });

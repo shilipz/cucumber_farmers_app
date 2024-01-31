@@ -24,12 +24,12 @@ class _ChatScreenState extends State<ChatScreen> {
     ChatMessage message = ChatMessage(
       isSentbyme: false,
       senderId: user!.uid,
-      adminId: widget.adminId,
+      adminId: 'adminId',
       message: text,
       timestamp: DateTime.now(),
     );
 
-    String chatId = user.uid + widget.adminId;
+    String chatId = user.uid + 'adminId';
     String messageId = DateTime.now().millisecondsSinceEpoch.toString();
     FirebaseFirestore.instance
         .collection('chats')
@@ -42,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    String chatId = user!.uid + widget.adminId;
+    String chatId = user!.uid + 'adminId';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kwhite,
@@ -137,34 +137,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ],
     );
   }
-
-  //   return Container(
-  //     margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-  //     child: Column(
-  //       crossAxisAlignment: crossAxisAlignment,
-  //       children: [
-  //         Material(
-  //           borderRadius: BorderRadius.circular(8.0),
-  //           color: messageColor,
-  //           child: Padding(
-  //             padding: const EdgeInsets.all(10.0),
-  //             child: InkWell(
-  //               onTap: () {},
-  //               child: Text(
-  //                 message.message,
-  //                 style: const TextStyle(color: kwhite, fontSize: 15),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //         Text(
-  //           DateFormat('hh:mm a').format(message.timestamp),
-  //           style: const TextStyle(fontSize: 12.0, color: Colors.grey),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   bool _shouldShowDate(ChatMessage message) {
     if (_lastDisplayedDate == null) {

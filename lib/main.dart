@@ -2,6 +2,7 @@ import 'package:cucumber_app/presentation/presentation_logic/product_search/prod
 import 'package:cucumber_app/presentation/presentation_logic/quantity_button/quantity_button_bloc.dart';
 import 'package:cucumber_app/presentation/views/contact_details/contact_details.dart';
 import 'package:cucumber_app/presentation/views/signing/login.dart';
+import 'package:cucumber_app/presentation/views/signing/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,6 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   runApp(const MyApp());
 }
 
@@ -36,12 +36,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,
         routes: {
-          // '/addproducts': (context) => const AddProducts(),
+          '/login': (context) => const Login(),
           '/contact_details': (context) => const ContactDetails(),
         },
-        home: Login(),
+        home: const SplashScreen(),
       ),
     );
   }

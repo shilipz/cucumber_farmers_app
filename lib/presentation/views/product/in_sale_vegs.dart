@@ -49,27 +49,49 @@ class InSale extends StatelessWidget {
                     var vegetable = snapshot.data!.docs[index];
                     var vegetableId = vegetable.id; // Document ID
                     var vegetableName = vegetable['vegetable_name'] ?? 'N/A';
-                    //var isOnSale = vegetable['isOnSale'] ?? false;
+                    var imageUrl = vegetable['imageURL'] ?? false;
                     var quantity = vegetable['quantity'] ?? 0;
-                    var collectionDate =
-                        vegetable['collection_date'] as Timestamp;
-                    var formattedDate = DateFormat('dd MMMM').format(
-                      DateTime.fromMillisecondsSinceEpoch(
+                    var collectionDate = vegetable['collection_date'];
+                    DateTime formattedDate;
+
+                    if (collectionDate is Timestamp) {
+                      formattedDate = DateTime.fromMillisecondsSinceEpoch(
                         collectionDate.seconds * 1000,
-                      ),
-                    );
+                      );
+                    } else if (collectionDate is String) {
+                      // Handle the case when 'collection_date' is a String
+                      try {
+                        formattedDate = DateFormat('dd MMMM', 'en_US')
+                            .parse(collectionDate);
+                      } catch (e) {
+                        // Handle parsing error, e.g., provide a default value
+                        formattedDate = DateTime.now();
+                      }
+                    } else {
+                      // Handle other cases if needed
+                      formattedDate = DateTime.now(); // Provide a default value
+                    }
+
+                    var formattedDateString =
+                        DateFormat('dd MMMM').format(formattedDate);
+
                     return ListTile(
                         title: Text(
                           vegetableName,
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w500),
                         ),
+                        leading: Container(
+                            decoration: const BoxDecoration(color: kwhite),
+                            width: 70,
+                            height: 70,
+                            child: Image.network(imageUrl)),
                         subtitle: Text(
-                            ' \nQuantity:$quantity  \nReady for $formattedDate'),
+                            ' \nQuantity:$quantity  \nReady for $formattedDateString'),
                         trailing: IconButton(
                           onPressed: () {
                             _showEditDialog(context, vegetableId, vegetableName,
-                                quantity, formattedDate, () {
+                                quantity, formattedDateString, () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       backgroundColor: darkgreen,
@@ -81,7 +103,7 @@ class InSale extends StatelessWidget {
                                       backgroundColor: darkgreen,
                                       content: Text(
                                           'Vegetable removed from next sale.')));
-                            });
+                            }, imageUrl);
                           },
                           icon: const Icon(
                             Icons.edit,
@@ -100,14 +122,14 @@ class InSale extends StatelessWidget {
 }
 
 void _showEditDialog(
-  BuildContext context,
-  String vegetableId,
-  String currentVegetableName,
-  int currentQuantity,
-  String currentCollectionDate,
-  VoidCallback onEdit,
-  VoidCallback onRemove,
-) {
+    BuildContext context,
+    String vegetableId,
+    String currentVegetableName,
+    int currentQuantity,
+    String currentCollectionDate,
+    VoidCallback onEdit,
+    VoidCallback onRemove,
+    String imageUrl) {
   TextEditingController nameController =
       TextEditingController(text: currentVegetableName);
   TextEditingController quantityController =
@@ -118,9 +140,12 @@ void _showEditDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text('Edit Vegetable'),
+        backgroundColor: kwhite,
+        title: const Text('Edit Vegetable', style: TextStyle(color: darkgreen)),
         content: Column(
           children: [
+            Container(width: 180, height: 180, child: Image.network(imageUrl)),
+            SizedBox(height: 32),
             TextField(
               controller: nameController,
               decoration: const InputDecoration(labelText: 'Vegetable Name'),
@@ -142,7 +167,10 @@ void _showEditDialog(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: darkgreen),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -152,7 +180,7 @@ void _showEditDialog(
               onEdit();
               Navigator.pop(context);
             },
-            child: const Text('Edit'),
+            child: const Text('Update', style: TextStyle(color: darkgreen)),
           ),
           TextButton(
             onPressed: () {
@@ -160,7 +188,7 @@ void _showEditDialog(
               onRemove();
               Navigator.pop(context);
             },
-            child: const Text('Remove'),
+            child: const Text('Remove', style: TextStyle(color: darkgreen)),
           ),
         ],
       );

@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PendingVeggies extends StatelessWidget {
-  const PendingVeggies({super.key});
+class PendingRequests extends StatelessWidget {
+  const PendingRequests({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +53,11 @@ class PendingVeggies extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var vegetable = pendingApproval[index];
                         var name = vegetable['name'];
+                        var vegetableId = vegetable.id;
+
                         var price = vegetable['price'];
 
-                        var imageUrl = vegetable['imageUrl'] ?? '';
+                        var imageUrl = vegetable['imageUrl'];
 
                         return Card(
                           child: ListTile(
@@ -71,7 +73,8 @@ class PendingVeggies extends StatelessWidget {
                             subtitle: Text('$price per Kg'),
                             trailing: IconButton(
                               onPressed: () {
-                                // Edit action
+                                _showEditOptions(context,
+                                    vegetableId: vegetableId);
                               },
                               icon: const Icon(Icons.edit),
                             ),
@@ -88,4 +91,44 @@ class PendingVeggies extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showEditOptions(BuildContext context, {required String vegetableId}) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          // ListTile(
+          //   leading: const Icon(Icons.edit),
+          //   title: const Text('Edit Image'),
+          //   onTap: () {
+          //     Navigator.pop(context); // Close the bottom sheet
+          //     _editImage(context, vegetableId);
+          //   },
+          // ),
+          ListTile(
+            leading: const Icon(Icons.delete),
+            title: const Text('Remove Vegetable'),
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              _removeVegetable(context, vegetableId);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// void _editImage(BuildContext context, String vegetableId) {
+//   // Implement the logic for editing the image here
+// }
+
+void _removeVegetable(BuildContext context, String vegetableId) {
+  FirebaseFirestore.instance
+      .collection('pending_approval')
+      .doc(vegetableId)
+      .delete();
 }
